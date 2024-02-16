@@ -1,0 +1,75 @@
+It is hard to represent 1/3 exactly
+There are also some weird decimal numbers that when converting to binary have a repeating end
+1/5 -> binary == 0.001100110011[0011]
+
+Floating point repersentation
+V = (-1)^S * M * 2^E
+The sign bit is S
+The mantissa (or significant) M [normally] a fraction value in range 
+Exponent E weights value by power of two
+
+Ex.
+Convert 8.5625_10 to floating repersentation
+8 -> 1000
+0.5625 -> 1001
+
+1000.1001
+Move the exponent to the right end (4 places) 
+Therefore, the E is -4.
+Because -4 is negative we have to take two's comp, giving us 11111100 for E
+                              S     E            M
+Therefore our final number is 0 11111100 0<->010001001
+
+IEEE 754 floating point (with 8.5625 as the example number)
+1. Determine the decimal number 
+2. Convert both sides of the radix point to binary 1.5 -> 0001.1000
+3. Normalize the binary number 
+    - Write it in scientific notation (binary format)
+    for 8.5625 -> 1000.1001 -> 1.0001001 (the ammount you move to the left is the exponent, in this case 3)
+4. Find the exponent of the floating point 
+    Bias == 2^(n-1) - 1, with n as the exponent \\ Single percision -> 127 || Doulbe percision -> 1023 
+    Add the bias to the exponent from step 3
+        127 + 3 = 130 -> 10000010 <- This is going to be the exponent of the result
+5. Determine the sign bit by looking at the decimal number (1 for negative, 0 for positive)
+6. Prepare mantissa (also called significant)
+    - Drop leading 1 from step 3
+    - Pad zerose to end to fit percision
+7. Combine all three parts (sign bit, biased exponent and normalized mantissa)
+
+Example, with -24.6526
+Ignore the sign
+24 -> 11000
+ .6526 -> 10100111
+11000.10100111
+Move it over to the left 4 times
+1.100010100111 * 2^4
+Bias + exponent = 131 = 10000011
+Sign is going to be 1 
+S      E              M
+1   10000011    1000101001110-->0
+
+Rounding a systematic method of finding the closest matching value
+    Round-to-even (closest && default) rounds a number up or down to the nearest even diget
+    Round-toward-zero rounds positive numbers downward and negative numbers upward
+    Round-down both pos and neg down
+    Round-up both pos and neg up 
+
+Round-to-even:
+considers the least significant digit, 0 to be even and 1 to be odd.
+If the last two significant digits are 11 round those two to the upper 1
+If the last two significant digits are 10 or 01 or 00 round those two to 0
+You are moving from the furtherest digit to the right of the radix point to the radix point, in pairs of two comparing.
+
+
+Floating point numbers in C 
+float is single percision
+double is double percision
+Machines use round to even rounding mode 
+More recent versions of C include long double
+
+Type Casting in C 
+int -> float cannot overflow, but can be rounded
+int or float -> double, the exact number maybe preserved because doulbe encapsulates both int and float 
+double -> float, the value can overflow , because the range is smaller 
+From float or double -> int , the int value will be rounded toward zero, with (float)1.99 = (int)0 and (float)-1.99 = (int)-1
+

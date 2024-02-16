@@ -1,0 +1,13 @@
+Operations "&, |, ~, ^" avaliale in C
+	- Apply to any "integral" data type
+		- Long, int, short, char
+
+	- View arguments as bit vectors
+	- Arguments applied bit-wise
+
+Examples
+	~0x41 --> 0xBE
+		~01000001 --> 10111110
+	
+
+

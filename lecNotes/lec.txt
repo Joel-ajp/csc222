@@ -1,0 +1,136 @@
+System calls
+    Operating system overciew
+    control flow 
+    process
+    context switch
+    process control 
+
+    Computer system 
+        - Hardware
+        Operating system
+        applications and programs
+        user
+
+    Operating system (2 jobs)
+        - Manages resoucres of computer, perpherials, files and memory
+
+        - Coordinates all other programs running on a computer =
+
+        *hardware: 
+            - processor
+            - Main memory (memory closest to the cpu)
+            - i/o devices
+
+        *software:
+            - os
+            - application programs
+            - 
+
+        Examples of os tasks:
+            - controls the use of resoucres among carious applications
+
+            - resoucre -> Management -> main secondary
+            - CPU scheduling, memory Management, and file Management
+            - Manages hardware and software resources in a safe, efficient, and fair manner
+                * safe -> writing while reading or reading while writing (unsafe stuff)
+                * efficiency and fair -> share resoucres and give process and chance to excecute 
+
+        Main goals of os   
+            - processes - instances of programs. multiple processes running at the same time(concurrent) -> each process has exclusive access to hardware
+            - virtual memory - illusion that every process has access to full system memory
+            - files - sequence of bytes
+
+        Process
+            Definitions"
+                - An instance of a running program
+                - A program excecutable
+                - entity taht can be assigned to, and executed on by a processor
+
+            Process abstraction (2):
+                - Logical control flow - each process seemingly thingks that has exclusive access to the cpu
+                    Each process has its own logical control flow
+                        - In the case that each process takes partical usage of CPU and shares the time it is [sequential]
+ 
+                        - In the case where we have time overlapping between rocess is called [concurren]
+
+                - Private addres space - each process seemingly thingks it has exclusive access to main memory
+
+        Context switching
+            - Processes are managed by a shared portion of the OS called kernal
+                - Part of the os not a peocess on its own
+
+                - User programs tend to make a lot of system calls, constantly going to the os->kernal to complete a call
+
+                - Modes:
+                    - User codes
+                    - Kernal code
+                        ^ swapping between these is called a context switch
+
+        Process states
+            - New -> process is created
+            - Ready -> waiting access to CPu
+            - Running -> being excecuted 
+            - Stopped -> execution is suspended
+            - Terminated -> process is stopped perminantly 
+
+    System calls 
+        - os is just a collection of programs, and the heart of os is the kernal
+
+        - kernal 0> provides a set of programs that call system calls (cp / mv)
+            SYstem calls are used to request access to resources of the machine, used to also communicate between programs and to start new programs
+
+        Modern unix kernals provide hundreds of system calls
+            * broken up into families of functions 0> each of which has its own operations and purpose
+        
+            Examples:   
+                [memory management system] asks the os to maniulate blocks of memory in some manner
+                [time management system] ask the os to access the system clock
+                [file system] asks the os to access the file or device (i.e. open() | read() | close())
+                [process system] asks the os to run another program or controls how it runs (i.e. fork , execl, execvp, wait)
+
+    Obtaining process IDs:
+        - Grabbing PIDs can be done in C
+            * pid_t getpid() -> returns the id of the current process
+            * pid_t getppid() -> returns the id of the parent process
+        
+        - pid_t -> requires using a spec library 
+            access pid_t via: #include <sys/types.h>
+            (pid_t is technically an int)
+            - Defined type, all it does it make code clearer (provides a definition of the variable's usecase)
+
+    Fork: creating a new process
+        - only requires one library: #include <unistd.h>
+        added bonus library for pid types: #include <sys/types.h>
+
+        - Creates a new process (in general a new process)
+        - returns 0, defines the child process (this returned back to the parent)
+
+    Reaping 
+        - Perormed by the parent trying to terminate the child
+
+    What if the parenet does reap 
+        - IF parent does reap child , then it is cleaned up by the intialization process (init process will reap and collect the reasources)        
+
+    Exec()
+        - load and run a new program in the on text of the current process
+
+        execl() -> returns -1 when there is error, nothing returned otherwise
+            * int excel(*char *path, char *arg0, char *arg1, NULL) // the arguements are space seperated by the , stuff
+
+        execle() -> adds on by allowing the chnge of env varaibles
+            * int execle(char *path, char *arg0, char*arg1, NULL, chear *envp[] || NULL)
+        
+            char *env[] = {
+                "LANG=fr.FR",
+                "HOME=/USERS/differentuser",
+                NULL
+            }
+
+        execlp -> mostly usedful handling errors, and spc uses PATH to find executables
+
+            * int execlp(char *filename, char *arg0, char *arg1, NULL)
+
+        execvp -> pass everything as a pointer arg
+
+            * int execvp(char *filename, char *args[])
+

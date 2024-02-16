@@ -1,0 +1,153 @@
+Why Linux?
+	- Possibility using it everyday
+	- Android Phone (OS is a flavor of linux)
+	- Linux servers process web requests 
+	- Linux is versatile
+		- Open source, there are more flavors
+	- Programming in C is very easy	
+
+Linux terminal
+	- Shell -> command line interface (CLI) or terminal
+	- Everything is case sensitive
+
+Linux File system 
+	- /bin -> common binaries/ commands, all users have access to them (cp, mv, ls, la, cat)
+	- /sbin - Binaries for system admins (requires root access) 
+	- /home is the users dir, personal user data 
+	- /lib -> shared libraries needed for sbin / bin   
+	- /media -> media devices like a usb, the mount point of hardware
+
+Terminal commands
+	cd ~	# Navigates to the home dir
+	mkdir {dir name} # creates a dir
+	cat {file name} # Views the contents of a file
+	more {file name} # allows to view file in a paginative format
+	echo {message} # prints a message to the terminal
+	cp {source} {destinaiton} # Copies the file from the source to the destination
+	mv {source} {destinaiton} # move a file to a destinaiton, rename files
+	history # Shows the past commands
+	clear # clears the terminal
+	wget {url} # download contents of url
+	ls # lists the files in a dir
+
+Linux Permissions
+	- Every user has a set of permissions 
+
+	* These users are already on the OS when it is installed
+	Service users - non-interactive (background) processes on a system (e.g. printing) -> system calls
+	Regular users - have necessary permissions to do stuff on the system (e.g. create files in home directory)
+	Super Users (root) - have admin perms, do anything on the system. Make system wide changes. Can access anything on the OS
+
+	- Split into different groups (zero or more users fall into these three groups):
+		User - owner of a file
+		Group - members of the file 
+		Others - any other user that is not in the other two groups
+
+	d rwx rwx rwx books/
+	^ refers either to a directory (d), link (l) or file (-)
+
+	d rwx rwx rwx books/
+		^ refers to the 'user' group
+
+	d rwx rwx rwx books/
+			^ refers to the 'group' group
+
+	d rwx rwx rwx books/
+				^ refers to the 'others' group
+
+	Ex.
+	d rwx r-- r-- books/
+
+	r is read = 100 = 4
+	w is write = 010 = 2 
+	x is excecute = 001 = 1
+
+	d rwx r-- r-- books/
+	  111 100 100 
+	  7   4   4 
+
+	General: chmod {permissions} {file, folder or link}
+	Ex: chmod 744 books/
+	Ex: chmod g-wx books/
+	Ex: chmod o-wx books/
+
+Linux I/O Redirection: 
+	stdin - Standard input
+		Ex. typing in the terminal via keyboard
+
+	stdout - Standard output 
+		Ex. Displayed on the terminal
+
+	stderr - Standard error
+		Ex. Displayed on the terminal
+
+	Redirections that overwrite a stream: 
+		< - stdin 
+		> - stdout 
+		2> - stderr
+
+	Redirections that append to a stream: 
+		<< - stdin
+		>> - stdout
+		2>> - stderr
+
+	examples:
+		$ ls -l > ls.txt # sends the outout of ls -l to ls.txt
+		$ wc -l < ls.txt # gets the number of lines through stdout
+
+	Pipe | # allows to send a stream to another program / command
+
+	example: 
+		$ ls -lh /bin # list of readable files  
+		$ ls -lh /bin | more # paginated view of the files 
+
+Linux filters
+	find - returns files with filesname that match arguents passe 
+	grep {pattern} {file/ dir} # returns matching pattern
+	tee # redirects standard in to both stdout and ne or more files 
+	tr # finds and replaces string with another (stdin)
+	wc # counts lines, words and bytes
+
+grep {what you are searching for} {file/path}
+
+regular expression (regex)
+	- Templates that are used to match some patterns 
+	- provide a way to describe and parse text
+	- There are two main characters 
+		* Regular literal characters
+		* Meta characters
+
+	Regular literals: 
+		[a-zA-Z0-9], think of it as the set of characters
+
+	Meta characters: 
+		- Anchor metat characters
+			* ^ matches the start of a pattern
+			* $ matches the end of a pattern
+
+		- Dot meta characters
+			* . matches a single characters
+
+		Character groups:
+			- use square brackets [abcd]
+
+		Groupings:
+			- Uses parantheses (sand)
+ 
+Bash history command 
+	- Running record of each command we have typed since boot
+
+	Changing the size is done in the bashrc file
+	- HISTSIZE=5000 # load only the last 5000 commands
+	- HISTFILESIZE={some number} # save some number of commands
+
+	Work to appending with multiple termnials open
+		- shopt -s histappened
+		- appends to this path: ~/.bashhistory	
+
+	To clear the history (empty the file): history -c && hsitory -w
+
+
+
+
+
